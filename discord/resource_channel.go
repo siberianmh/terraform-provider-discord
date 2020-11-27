@@ -18,17 +18,31 @@ func resourceChannel() *schema.Resource {
 		},
 
 		Schema: map[string]*schema.Schema{
-			"channel_name": &schema.Schema{
+			"channel_name": {
 				Type:         schema.TypeString,
 				Description:  "The name of Discord Channel that will be created",
 				Required:     true,
 				ValidateFunc: validation.StringLenBetween(2, 100),
 			},
 
-			"channel_topic": &schema.Schema{
+			"channel_topic": {
 				Type:        schema.TypeString,
 				Description: "Sets the topic for a channel",
 				Optional:    true,
+			},
+
+			"type": {
+				Type:        schema.TypeInt,
+				Description: "Type of the channel (se)",
+				Optional:    true,
+				Default:     0,
+			},
+
+			"nsfw": {
+				Type:        schema.TypeBool,
+				Description: "Should this channel be marked as NSFW",
+				Optional:    true,
+				Default:     false,
 			},
 		},
 	}
@@ -44,11 +58,20 @@ func resourceChannelCreate(d *schema.ResourceData, meta interface{}) error {
 		return err
 	}
 
+	data := discordgo.GuildChannelCreateData{
+		Name:  d.Get("channe_name").(string),
+		Topic: d.Get("channel_topic").(string),
+		Type:  discordgo.ChannelType(d.Get("type").(int)),
+		NSFW:  d.Get("nsfw").(bool),
+	}
+
 	// Create Discord Channel
-	channel, err := api.GuildChannelCreate(meta.(*Config).GuildID, d.Get("channel_name").(string), 0)
+	channel, err := api.GuildChannelCreateComplex(meta.(*Config).GuildID, data)
+
 	if err != nil {
 		return err
 	}
+
 	d.SetId(channel.ID)
 
 	return nil

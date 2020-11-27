@@ -5,16 +5,17 @@ import (
 	"github.com/hashicorp/terraform/terraform"
 )
 
+// Provider retruns a Terraform Resource Provider
 func Provider() terraform.ResourceProvider {
 	return &schema.Provider{
 		Schema: map[string]*schema.Schema{
-			"bot_token": &schema.Schema{
+			"bot_token": {
 				Type:        schema.TypeString,
 				Required:    true,
 				DefaultFunc: schema.EnvDefaultFunc("DISCORD_API_TOKEN", nil),
 				Description: "Discord Authentication Token for discord.com/api",
 			},
-			"guild_id": &schema.Schema{
+			"guild_id": {
 				Type:        schema.TypeString,
 				Required:    true,
 				Description: "The Guild ID.",

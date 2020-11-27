@@ -18,6 +18,8 @@ provider "discord" {
 
 resource "discord_channel" "proj-party" {
   channel_name = "proj-party"
+  channel_topic = "Channel for discussing the party"
+  type = 0
 }
 ```
 

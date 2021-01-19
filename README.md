@@ -13,7 +13,7 @@
 ```terraform
 provider "discord" {
   bot_token = "DISCORD_BOT_TOKEN"
-  guild_id = "ID_OF_THE_DISCORD_GUILD"
+  guild_id = "ID_OF_THE_GUILD"
 }
 
 resource "discord_channel" "proj-party" {

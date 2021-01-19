@@ -22,7 +22,7 @@ func resourceChannel() *schema.Resource {
 				Type:         schema.TypeString,
 				Description:  "The name of Discord Channel that will be created",
 				Required:     true,
-				ValidateFunc: validation.StringLenBetween(2, 100),
+				ValidateFunc: validation.IntBetween(2, 100),
 			},
 
 			"channel_topic": {

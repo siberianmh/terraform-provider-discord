@@ -48,10 +48,7 @@ func resourceChannel() *schema.Resource {
 }
 
 func resourceChannelCreate(d *schema.ResourceData, meta interface{}) error {
-	api, err := discordgo.New("Bot " + meta.(*Config).APIToken)
-	if err != nil {
-		return err
-	}
+	api := meta.(*Config).Session
 
 	data := discordgo.GuildChannelCreateData{
 		Name:  d.Get("channe_name").(string),
@@ -73,13 +70,10 @@ func resourceChannelCreate(d *schema.ResourceData, meta interface{}) error {
 }
 
 func resourceChannelRead(d *schema.ResourceData, meta interface{}) error {
-	api, err := discordgo.New("Bot " + meta.(*Config).APIToken)
-	if err != nil {
-		return err
-	}
+	api := meta.(*Config).Session
 
 	// Checks if Discord Channel exists, if not remove resources from state
-	_, err = api.Channel(d.Id())
+	_, err := api.Channel(d.Id())
 	if err != nil {
 		d.SetId("")
 		return nil
@@ -89,10 +83,7 @@ func resourceChannelRead(d *schema.ResourceData, meta interface{}) error {
 }
 
 func resourceChannelUpdate(d *schema.ResourceData, meta interface{}) error {
-	api, err := discordgo.New("Bot " + meta.(Config).APIToken)
-	if err != nil {
-		return err
-	}
+	api := meta.(Config).Session
 
 	name := d.Get("channel_name").(string)
 	if _, err := api.ChannelEdit(meta.(*Config).GuildID, name); err != nil {
@@ -102,10 +93,7 @@ func resourceChannelUpdate(d *schema.ResourceData, meta interface{}) error {
 }
 
 func resourceChannelDelete(d *schema.ResourceData, meta interface{}) error {
-	api, err := discordgo.New("Bot " + meta.(Config).APIToken)
-	if err != nil {
-		return err
-	}
+	api := meta.(Config).Session
 
 	// Deletes Discord Channel and clears state
 	if _, err := api.ChannelDelete(d.Id()); err != nil {
@@ -116,10 +104,7 @@ func resourceChannelDelete(d *schema.ResourceData, meta interface{}) error {
 }
 
 func resourceChannelImportState(d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
-	api, err := discordgo.New("Bot " + meta.(Config).APIToken)
-	if err != nil {
-		return nil, err
-	}
+	api := meta.(Config).Session
 
 	// Check if channel exists, otherwise remove
 	channel, err := api.Channel(d.Id())

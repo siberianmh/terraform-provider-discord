@@ -3,7 +3,6 @@ package discord
 import (
 	"fmt"
 
-	"github.com/bwmarrin/discordgo"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -33,11 +32,7 @@ func dataSourceDiscordUser() *schema.Resource {
 }
 
 func dataSourceDiscordUserRead(d *schema.ResourceData, meta interface{}) error {
-	api, err := discordgo.New("Bot " + meta.(*Config).APIToken)
-
-	if err != nil {
-		return err
-	}
+	api := meta.(*Config).Session
 
 	email := d.Get("email").(string)
 	fmt.Printf("[Info] Reading Discord user '%s'", email)
@@ -55,5 +50,5 @@ func dataSourceDiscordUserRead(d *schema.ResourceData, meta interface{}) error {
 		return nil
 	}
 
-	return fmt.Errorf("Invalid user with email: '%s'", email)
+	return fmt.Errorf("invalid user with email: '%s'", email)
 }

@@ -45,11 +45,7 @@ func resourceRole() *schema.Resource {
 }
 
 func resourceRoleCreate(d *schema.ResourceData, meta interface{}) error {
-	api, err := discordgo.New("Bot " + meta.(*Config).APIToken)
-	if err != nil {
-		return err
-	}
-
+	api := meta.(*Config).Session
 	guild := meta.(*Config).GuildID
 
 	role, err := api.GuildRoleCreate(guild)
@@ -68,10 +64,7 @@ func resourceRoleCreate(d *schema.ResourceData, meta interface{}) error {
 }
 
 func resourceRoleRead(d *schema.ResourceData, meta interface{}) error {
-	api, err := discordgo.New("Bot " + meta.(*Config).APIToken)
-	if err != nil {
-		return err
-	}
+	api := meta.(*Config).Session
 
 	roles, err := api.GuildRoles(meta.(*Config).GuildID)
 	if err != nil {
@@ -99,12 +92,9 @@ func resourceRoleRead(d *schema.ResourceData, meta interface{}) error {
 }
 
 func resourceRoleUpdate(d *schema.ResourceData, meta interface{}) error {
-	api, err := discordgo.New("Bot " + meta.(*Config).APIToken)
-	if err != nil {
-		return err
-	}
+	api := meta.(*Config).Session
 
-	_, err = api.GuildRoleEdit(meta.(*Config).GuildID, d.Id(), d.Get("name").(string), d.Get("color").(int), d.Get("hoist").(bool), d.Get("persmissions").(int64), d.Get("mentionable").(bool))
+	_, err := api.GuildRoleEdit(meta.(*Config).GuildID, d.Id(), d.Get("name").(string), d.Get("color").(int), d.Get("hoist").(bool), d.Get("persmissions").(int64), d.Get("mentionable").(bool))
 	if err != nil {
 		return err
 	}
@@ -140,10 +130,6 @@ func resourceRoleUpdate(d *schema.ResourceData, meta interface{}) error {
 }
 
 func resourceRoleDelete(d *schema.ResourceData, meta interface{}) error {
-	api, err := discordgo.New("Bot " + meta.(*Config).APIToken)
-	if err != nil {
-		return err
-	}
-
+	api := meta.(*Config).Session
 	return api.GuildRoleDelete(meta.(*Config).GuildID, d.Id())
 }

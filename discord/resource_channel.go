@@ -12,7 +12,6 @@ func resourceChannel() *schema.Resource {
 		Read:   resourceChannelRead,
 		Update: resourceChannelUpdate,
 		Delete: resourceChannelDelete,
-		Exists: resourceChannelExists,
 		Importer: &schema.ResourceImporter{
 			State: resourceChannelImportState,
 		},
@@ -46,10 +45,6 @@ func resourceChannel() *schema.Resource {
 			},
 		},
 	}
-}
-
-func resourceChannelExists(d *schema.ResourceData, meta interface{}) (bool, error) {
-	return true, nil
 }
 
 func resourceChannelCreate(d *schema.ResourceData, meta interface{}) error {

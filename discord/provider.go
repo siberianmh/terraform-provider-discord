@@ -22,7 +22,9 @@ func Provider() *schema.Provider {
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			"discord_channel": resourceChannel(),
+			"discord_role":    resourceRole(),
 		},
+
 		ConfigureFunc: configureProvider,
 	}
 }
@@ -32,5 +34,6 @@ func configureProvider(d *schema.ResourceData) (interface{}, error) {
 		APIToken: d.Get("bot_token").(string),
 		GuildID:  d.Get("guild_id").(string),
 	}
+
 	return config, nil
 }
